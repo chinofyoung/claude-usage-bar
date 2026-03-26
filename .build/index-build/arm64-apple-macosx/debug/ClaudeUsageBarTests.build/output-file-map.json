@@ -1,0 +1,19 @@
+{
+  "": {
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/primary.swiftdeps"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Tests/ClaudeUsageBarTests/SettingsManagerTests.swift": {
+    "dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/SettingsManagerTests.d",
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/SettingsManagerTests.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/SettingsManagerTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/SettingsManagerTests.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/SettingsManagerTests.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Tests/ClaudeUsageBarTests/UsageSnapshotTests.swift": {
+    "dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/UsageSnapshotTests.d",
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/UsageSnapshotTests.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/UsageSnapshotTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/UsageSnapshotTests.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/index-build/arm64-apple-macosx/debug/ClaudeUsageBarTests.build/UsageSnapshotTests.dia"
+  }
+}

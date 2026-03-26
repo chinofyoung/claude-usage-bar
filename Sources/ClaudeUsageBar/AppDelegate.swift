@@ -33,6 +33,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             .store(in: &cancellables)
 
+        SettingsManager.shared.$settings
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateStatusBar(usage: UsageService.shared.currentUsage)
+            }
+            .store(in: &cancellables)
+
         UsageService.shared.$currentUsage
             .receive(on: DispatchQueue.main)
             .sink { usage in
@@ -81,21 +88,64 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             attributes: baseAttributes.merging([.foregroundColor: NSColor.secondaryLabelColor]) { $1 }
         )
 
-        attributedString.append(NSAttributedString(
-            string: "5h:\(fiveHourValue)%",
-            attributes: baseAttributes.merging([.foregroundColor: color(for: fiveHourValue)]) { $1 }
-        ))
-        attributedString.append(separator)
-        attributedString.append(NSAttributedString(
-            string: "7d:\(sevenDayValue)%",
-            attributes: baseAttributes.merging([.foregroundColor: color(for: sevenDayValue)]) { $1 }
-        ))
-        if let sonnetValue {
-            attributedString.append(NSAttributedString(string: separator.string, attributes: separator.attributes(at: 0, effectiveRange: nil)))
+        func iconAttachment(symbolName: String, color: NSColor) -> NSAttributedString {
+            let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .medium)
+            if let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)?
+                .withSymbolConfiguration(config) {
+                image.isTemplate = true
+                let attachment = NSTextAttachment()
+                attachment.image = image
+                let mid = font.descender + font.capHeight
+                attachment.bounds = CGRect(
+                    x: 0,
+                    y: (mid - image.size.height) / 2,
+                    width: image.size.width,
+                    height: image.size.height
+                )
+                let attrStr = NSMutableAttributedString(attachment: attachment)
+                attrStr.addAttribute(.foregroundColor, value: color, range: NSRange(location: 0, length: attrStr.length))
+                return attrStr
+            }
+            return NSAttributedString(string: symbolName)
+        }
+
+        if settings.useIcons {
+            attributedString.append(iconAttachment(symbolName: "clock", color: color(for: fiveHourValue)))
             attributedString.append(NSAttributedString(
-                string: "S:\(sonnetValue)%",
-                attributes: baseAttributes.merging([.foregroundColor: color(for: sonnetValue)]) { $1 }
+                string: " \(fiveHourValue)%",
+                attributes: baseAttributes.merging([.foregroundColor: color(for: fiveHourValue)]) { $1 }
             ))
+            attributedString.append(separator)
+            attributedString.append(iconAttachment(symbolName: "calendar", color: color(for: sevenDayValue)))
+            attributedString.append(NSAttributedString(
+                string: " \(sevenDayValue)%",
+                attributes: baseAttributes.merging([.foregroundColor: color(for: sevenDayValue)]) { $1 }
+            ))
+            if let sonnetValue {
+                attributedString.append(NSAttributedString(string: separator.string, attributes: separator.attributes(at: 0, effectiveRange: nil)))
+                attributedString.append(iconAttachment(symbolName: "sparkles", color: color(for: sonnetValue)))
+                attributedString.append(NSAttributedString(
+                    string: " \(sonnetValue)%",
+                    attributes: baseAttributes.merging([.foregroundColor: color(for: sonnetValue)]) { $1 }
+                ))
+            }
+        } else {
+            attributedString.append(NSAttributedString(
+                string: "5h:\(fiveHourValue)%",
+                attributes: baseAttributes.merging([.foregroundColor: color(for: fiveHourValue)]) { $1 }
+            ))
+            attributedString.append(separator)
+            attributedString.append(NSAttributedString(
+                string: "7d:\(sevenDayValue)%",
+                attributes: baseAttributes.merging([.foregroundColor: color(for: sevenDayValue)]) { $1 }
+            ))
+            if let sonnetValue {
+                attributedString.append(NSAttributedString(string: separator.string, attributes: separator.attributes(at: 0, effectiveRange: nil)))
+                attributedString.append(NSAttributedString(
+                    string: "S:\(sonnetValue)%",
+                    attributes: baseAttributes.merging([.foregroundColor: color(for: sonnetValue)]) { $1 }
+                ))
+            }
         }
 
         if isCritical {

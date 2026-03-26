@@ -10,6 +10,8 @@ struct AppSettings: Codable {
     var criticalThreshold: Double = 90
     /// Whether to post system notifications when thresholds are crossed (default: true)
     var notificationsEnabled: Bool = true
+    /// Whether to show SF Symbol icons in the status bar and popover (default: true)
+    var useIcons: Bool = true
 }
 
 // MARK: - SettingsManager

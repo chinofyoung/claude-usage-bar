@@ -25,6 +25,15 @@ struct SettingsView: View {
             }
 
             Section {
+                Toggle("Use icons", isOn: $settingsManager.settings.useIcons)
+                    .onChange(of: settingsManager.settings.useIcons) { _ in
+                        settingsManager.save()
+                    }
+            } header: {
+                Text("Appearance")
+            }
+
+            Section {
                 Toggle("Enable notifications", isOn: $settingsManager.settings.notificationsEnabled)
                     .onChange(of: settingsManager.settings.notificationsEnabled) { _ in
                         settingsManager.save()

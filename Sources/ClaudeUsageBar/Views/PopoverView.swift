@@ -4,6 +4,7 @@ import SwiftUI
 
 struct PopoverView: View {
     @ObservedObject var usageService = UsageService.shared
+    @ObservedObject var settingsManager = SettingsManager.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -54,29 +55,35 @@ struct PopoverView: View {
     }
 
     private func usageRows(for usage: UsageSnapshot) -> some View {
-        let settings = SettingsManager.shared.settings
+        let settings = settingsManager.settings
         return VStack(spacing: 8) {
             UsageRowView(
+                iconName: "clock",
                 label: "5-hour",
                 utilization: usage.fiveHourUtilization,
                 resetIn: usage.fiveHourResetIn,
                 warningThreshold: settings.warningThreshold,
-                criticalThreshold: settings.criticalThreshold
+                criticalThreshold: settings.criticalThreshold,
+                useIcons: settings.useIcons
             )
             UsageRowView(
+                iconName: "calendar",
                 label: "7-day",
                 utilization: usage.sevenDayUtilization,
                 resetIn: usage.sevenDayResetIn,
                 warningThreshold: settings.warningThreshold,
-                criticalThreshold: settings.criticalThreshold
+                criticalThreshold: settings.criticalThreshold,
+                useIcons: settings.useIcons
             )
             if let sonnet = usage.sonnetUtilization {
                 UsageRowView(
+                    iconName: "sparkles",
                     label: "Sonnet",
                     utilization: sonnet,
                     resetIn: nil,
                     warningThreshold: settings.warningThreshold,
-                    criticalThreshold: settings.criticalThreshold
+                    criticalThreshold: settings.criticalThreshold,
+                    useIcons: settings.useIcons
                 )
             }
         }
@@ -142,15 +149,23 @@ struct PopoverView: View {
 // MARK: - UsageRowView
 
 private struct UsageRowView: View {
+    let iconName: String
     let label: String
     let utilization: Int
     let resetIn: String?
     let warningThreshold: Double
     let criticalThreshold: Double
+    let useIcons: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            HStack {
+            HStack(alignment: .center, spacing: 6) {
+                if useIcons {
+                    Image(systemName: iconName)
+                        .font(.caption)
+                        .frame(width: 14, alignment: .center)
+                        .foregroundColor(utilizationColor)
+                }
                 Text(label)
                     .font(.caption)
                 Spacer()
@@ -158,6 +173,7 @@ private struct UsageRowView: View {
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundColor(utilizationColor)
+                    .frame(alignment: .center)
                 if let resetIn {
                     Text(resetIn)
                         .font(.caption2)
