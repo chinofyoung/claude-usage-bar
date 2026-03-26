@@ -23,6 +23,13 @@
     "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/OAuthUsageResponse.swiftdeps",
     "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/OAuthUsageResponse.dia"
   },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageHistoryStore.swift": {
+    "dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageHistoryStore.d",
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageHistoryStore.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageHistoryStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageHistoryStore.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageHistoryStore.dia"
+  },
   "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageSnapshot.swift": {
     "dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageSnapshot.d",
     "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageSnapshot.swift.o",
@@ -64,6 +71,13 @@
     "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SettingsView~partial.swiftmodule",
     "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SettingsView.swiftdeps",
     "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SettingsView.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/SparklineView.swift": {
+    "dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SparklineView.d",
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SparklineView.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SparklineView~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SparklineView.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SparklineView.dia"
   },
   "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/main.swift": {
     "dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/main.d",

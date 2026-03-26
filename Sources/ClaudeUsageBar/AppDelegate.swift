@@ -2,6 +2,7 @@ import AppKit
 import SwiftUI
 import Combine
 import UserNotifications
+import ServiceManagement
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     static private(set) var shared: AppDelegate!
@@ -25,6 +26,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         UsageService.shared.startPolling()
         NotificationService.shared.requestAuthorization()
+
+        // Sync launch-at-login setting with OS state
+        if SMAppService.mainApp.status != .enabled && SettingsManager.shared.settings.launchAtLogin {
+            SettingsManager.shared.settings.launchAtLogin = false
+            SettingsManager.shared.save()
+        }
 
         UsageService.shared.$currentUsage
             .receive(on: DispatchQueue.main)
@@ -71,7 +78,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             } else if doubleValue >= settings.warningThreshold {
                 return NSColor.systemOrange
             } else {
-                return NSColor.labelColor
+                return settings.accentColor.nsColor
             }
         }
 
@@ -79,9 +86,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let fiveHourValue = usage.fiveHourUtilization
         let sonnetValue = usage.sonnetUtilization
 
-        var allValues = [fiveHourValue, sevenDayValue]
-        if let s = sonnetValue { allValues.append(s) }
-        let isCritical = allValues.contains { Double($0) >= settings.criticalThreshold }
+        // Collect all visible values to determine the critical warning indicator
+        var visibleValues: [Int] = []
+        if settings.showFiveHour { visibleValues.append(fiveHourValue) }
+        if settings.showSevenDay { visibleValues.append(sevenDayValue) }
+        if settings.showSonnet, let s = sonnetValue { visibleValues.append(s) }
+
+        let isCritical = visibleValues.contains { Double($0) >= settings.criticalThreshold }
 
         let separator = NSAttributedString(
             string: " · ",
@@ -109,43 +120,106 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return NSAttributedString(string: symbolName)
         }
 
-        if settings.useIcons {
-            attributedString.append(iconAttachment(symbolName: "clock", color: color(for: fiveHourValue)))
-            attributedString.append(NSAttributedString(
-                string: " \(fiveHourValue)%",
-                attributes: baseAttributes.merging([.foregroundColor: color(for: fiveHourValue)]) { $1 }
-            ))
-            attributedString.append(separator)
-            attributedString.append(iconAttachment(symbolName: "calendar", color: color(for: sevenDayValue)))
-            attributedString.append(NSAttributedString(
-                string: " \(sevenDayValue)%",
-                attributes: baseAttributes.merging([.foregroundColor: color(for: sevenDayValue)]) { $1 }
-            ))
-            if let sonnetValue {
-                attributedString.append(NSAttributedString(string: separator.string, attributes: separator.attributes(at: 0, effectiveRange: nil)))
-                attributedString.append(iconAttachment(symbolName: "sparkles", color: color(for: sonnetValue)))
-                attributedString.append(NSAttributedString(
-                    string: " \(sonnetValue)%",
-                    attributes: baseAttributes.merging([.foregroundColor: color(for: sonnetValue)]) { $1 }
+        // Helper to append a metric segment, inserting a separator if needed
+        var isFirstSegment = true
+        func appendSegment(_ segment: NSAttributedString) {
+            if !isFirstSegment {
+                attributedString.append(separator)
+            }
+            attributedString.append(segment)
+            isFirstSegment = false
+        }
+
+        switch settings.statusBarStyle {
+        case .normal:
+            if settings.showFiveHour {
+                let segment = NSMutableAttributedString()
+                if settings.useIcons {
+                    segment.append(iconAttachment(symbolName: "clock", color: color(for: fiveHourValue)))
+                    segment.append(NSAttributedString(
+                        string: " \(fiveHourValue)%",
+                        attributes: baseAttributes.merging([.foregroundColor: color(for: fiveHourValue)]) { $1 }
+                    ))
+                } else {
+                    segment.append(NSAttributedString(
+                        string: "5h:\(fiveHourValue)%",
+                        attributes: baseAttributes.merging([.foregroundColor: color(for: fiveHourValue)]) { $1 }
+                    ))
+                }
+                appendSegment(segment)
+            }
+
+            if settings.showSevenDay {
+                let segment = NSMutableAttributedString()
+                if settings.useIcons {
+                    segment.append(iconAttachment(symbolName: "calendar", color: color(for: sevenDayValue)))
+                    segment.append(NSAttributedString(
+                        string: " \(sevenDayValue)%",
+                        attributes: baseAttributes.merging([.foregroundColor: color(for: sevenDayValue)]) { $1 }
+                    ))
+                } else {
+                    segment.append(NSAttributedString(
+                        string: "7d:\(sevenDayValue)%",
+                        attributes: baseAttributes.merging([.foregroundColor: color(for: sevenDayValue)]) { $1 }
+                    ))
+                }
+                appendSegment(segment)
+            }
+
+            if settings.showSonnet, let sonnetValue {
+                let segment = NSMutableAttributedString()
+                if settings.useIcons {
+                    segment.append(iconAttachment(symbolName: "sparkles", color: color(for: sonnetValue)))
+                    segment.append(NSAttributedString(
+                        string: " \(sonnetValue)%",
+                        attributes: baseAttributes.merging([.foregroundColor: color(for: sonnetValue)]) { $1 }
+                    ))
+                } else {
+                    segment.append(NSAttributedString(
+                        string: "S:\(sonnetValue)%",
+                        attributes: baseAttributes.merging([.foregroundColor: color(for: sonnetValue)]) { $1 }
+                    ))
+                }
+                appendSegment(segment)
+            }
+
+        case .compact:
+            // Short text-only labels: "5h:42% · 7d:18%"
+            if settings.showFiveHour {
+                appendSegment(NSAttributedString(
+                    string: "5h:\(fiveHourValue)%",
+                    attributes: baseAttributes.merging([.foregroundColor: color(for: fiveHourValue)]) { $1 }
                 ))
             }
-        } else {
-            attributedString.append(NSAttributedString(
-                string: "5h:\(fiveHourValue)%",
-                attributes: baseAttributes.merging([.foregroundColor: color(for: fiveHourValue)]) { $1 }
-            ))
-            attributedString.append(separator)
-            attributedString.append(NSAttributedString(
-                string: "7d:\(sevenDayValue)%",
-                attributes: baseAttributes.merging([.foregroundColor: color(for: sevenDayValue)]) { $1 }
-            ))
-            if let sonnetValue {
-                attributedString.append(NSAttributedString(string: separator.string, attributes: separator.attributes(at: 0, effectiveRange: nil)))
-                attributedString.append(NSAttributedString(
+            if settings.showSevenDay {
+                appendSegment(NSAttributedString(
+                    string: "7d:\(sevenDayValue)%",
+                    attributes: baseAttributes.merging([.foregroundColor: color(for: sevenDayValue)]) { $1 }
+                ))
+            }
+            if settings.showSonnet, let sonnetValue {
+                appendSegment(NSAttributedString(
                     string: "S:\(sonnetValue)%",
                     attributes: baseAttributes.merging([.foregroundColor: color(for: sonnetValue)]) { $1 }
                 ))
             }
+
+        case .minimal:
+            // Show only the highest utilization among visible metrics
+            let highestValue = visibleValues.max()
+            let displayValue = highestValue ?? 0
+            attributedString.append(NSAttributedString(
+                string: "\(displayValue)%",
+                attributes: baseAttributes.merging([.foregroundColor: color(for: displayValue)]) { $1 }
+            ))
+        }
+
+        // If nothing was added (all metrics hidden and not minimal), show a placeholder
+        if attributedString.length == 0 {
+            attributedString.append(NSAttributedString(
+                string: "—",
+                attributes: baseAttributes.merging([.foregroundColor: NSColor.secondaryLabelColor]) { $1 }
+            ))
         }
 
         if isCritical {
@@ -165,8 +239,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func showPopoverPanel(relativeTo button: NSStatusBarButton) {
+        let popoverWidth = SettingsManager.shared.settings.popoverWidth.points
         let hostingController = NSHostingController(rootView: PopoverView())
-        hostingController.view.frame.size = hostingController.sizeThatFits(in: NSSize(width: 260, height: 600))
+        hostingController.view.frame.size = hostingController.sizeThatFits(in: NSSize(width: popoverWidth + 20, height: 600))
 
         let panel = NSPanel(
             contentRect: NSRect(origin: .zero, size: hostingController.view.frame.size),

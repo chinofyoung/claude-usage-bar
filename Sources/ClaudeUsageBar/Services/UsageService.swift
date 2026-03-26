@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 @MainActor
 class UsageService: ObservableObject {
@@ -10,15 +11,25 @@ class UsageService: ObservableObject {
 
     private var cachedToken: String? = nil
     private var pollTimer: Timer? = nil
-
-    private let normalInterval: TimeInterval = 300   // 5 minutes
-    private let backoffInterval: TimeInterval = 900  // 15 minutes
+    private var cancellables = Set<AnyCancellable>()
 
     private init() {}
 
     // MARK: - Public API
 
     func startPolling() {
+        SettingsManager.shared.$settings
+            .map(\.pollInterval)
+            .removeDuplicates()
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                let interval = SettingsManager.shared.settings.pollInterval
+                self.schedulePoll(interval: interval)
+            }
+            .store(in: &cancellables)
+
         Task { @MainActor in
             await fetchUsage()
         }
@@ -41,25 +52,42 @@ class UsageService: ObservableObject {
 
             let (data, response) = try await URLSession.shared.data(for: request)
 
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 429 {
-                // Rate limited — clear cached token and back off
-                cachedToken = nil
-                schedulePoll(interval: backoffInterval)
-                error = "Rate limited (429). Retrying in 15 minutes."
-                return
+            if let httpResponse = response as? HTTPURLResponse {
+                let statusCode = httpResponse.statusCode
+                if statusCode == 429 {
+                    // Rate limited — clear cached token and back off
+                    cachedToken = nil
+                    schedulePoll(interval: max(900, SettingsManager.shared.settings.pollInterval * 2))
+                    error = "Rate limited (429). Retrying in 15 minutes."
+                    return
+                } else if statusCode == 401 || statusCode == 403 {
+                    cachedToken = nil
+                    schedulePoll(interval: max(900, SettingsManager.shared.settings.pollInterval * 2))
+                    error = "Authentication failed. Please re-sign in to Claude Code."
+                    return
+                } else if statusCode < 200 || statusCode >= 300 {
+                    schedulePoll(interval: SettingsManager.shared.settings.pollInterval)
+                    error = "API error (\(statusCode)). Retrying..."
+                    return
+                }
             }
 
             let decoded = try JSONDecoder().decode(OAuthUsageResponse.self, from: data)
-            currentUsage = UsageSnapshot.from(response: decoded)
+            let snapshot = UsageSnapshot.from(response: decoded)
+            currentUsage = snapshot
             error = nil
-            schedulePoll(interval: normalInterval)
+            UsageHistoryStore.shared.append(snapshot: snapshot)
+            schedulePoll(interval: SettingsManager.shared.settings.pollInterval)
 
         } catch KeychainError.itemNotFound {
             error = "Claude Code credentials not found in Keychain. Please sign in to Claude Code."
-            schedulePoll(interval: backoffInterval)
+            schedulePoll(interval: max(900, SettingsManager.shared.settings.pollInterval * 2))
+        } catch is DecodingError {
+            self.error = "Failed to parse usage data. The API response format may have changed."
+            schedulePoll(interval: SettingsManager.shared.settings.pollInterval)
         } catch {
             self.error = error.localizedDescription
-            schedulePoll(interval: normalInterval)
+            schedulePoll(interval: SettingsManager.shared.settings.pollInterval)
         }
     }
 

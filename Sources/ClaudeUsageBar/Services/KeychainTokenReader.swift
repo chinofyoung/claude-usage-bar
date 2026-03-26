@@ -32,7 +32,9 @@ struct KeychainTokenReader {
             throw KeychainError.unexpectedData
         }
 
-        let credentials = try JSONDecoder().decode(KeychainCredentials.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let credentials = try decoder.decode(KeychainCredentials.self, from: data)
         return credentials.claudeAiOauth.accessToken
     }
 }
@@ -41,10 +43,6 @@ struct KeychainTokenReader {
 
 private struct KeychainCredentials: Codable {
     let claudeAiOauth: OAuthData
-
-    enum CodingKeys: String, CodingKey {
-        case claudeAiOauth
-    }
 }
 
 private struct OAuthData: Codable {

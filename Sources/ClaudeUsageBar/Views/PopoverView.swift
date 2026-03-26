@@ -1,12 +1,38 @@
 import SwiftUI
 
+// MARK: - AccentColorOption + SwiftUI / AppKit helpers
+
+extension AccentColorOption {
+    var color: Color {
+        switch self {
+        case .green: return .green
+        case .blue: return .blue
+        case .purple: return .purple
+        case .teal: return .teal
+        case .system: return .accentColor
+        }
+    }
+
+    var nsColor: NSColor {
+        switch self {
+        case .green: return .systemGreen
+        case .blue: return .systemBlue
+        case .purple: return .systemPurple
+        case .teal: return .systemTeal
+        case .system: return .controlAccentColor
+        }
+    }
+}
+
 // MARK: - PopoverView
 
 struct PopoverView: View {
     @ObservedObject var usageService = UsageService.shared
     @ObservedObject var settingsManager = SettingsManager.shared
+    @ObservedObject var historyStore = UsageHistoryStore.shared
 
     var body: some View {
+        let settings = settingsManager.settings
         VStack(alignment: .leading, spacing: 12) {
             headerView
 
@@ -23,6 +49,39 @@ struct PopoverView: View {
                 usageRows(for: usage)
             }
 
+            if settings.showSparklines && historyStore.last24Hours.count >= 2 {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("24h trend")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    HStack(spacing: 8) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("5h")
+                                .font(.system(size: 9))
+                                .foregroundStyle(.secondary)
+                            SparklineView(
+                                records: historyStore.last24Hours,
+                                keyPath: \.fiveHourUtilization,
+                                color: .blue,
+                                label: "5h"
+                            )
+                        }
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("7d")
+                                .font(.system(size: 9))
+                                .foregroundStyle(.secondary)
+                            SparklineView(
+                                records: historyStore.last24Hours,
+                                keyPath: \.sevenDayUtilization,
+                                color: .purple,
+                                label: "7d"
+                            )
+                        }
+                    }
+                    .frame(height: 40)
+                }
+            }
+
             Divider()
 
             actionButtons
@@ -34,7 +93,7 @@ struct PopoverView: View {
             quitButton
         }
         .padding(16)
-        .frame(width: 240)
+        .frame(width: settings.popoverWidth.points)
         .background(VisualEffectView(material: .popover, blendingMode: .behindWindow))
         .cornerRadius(10)
     }
@@ -57,25 +116,33 @@ struct PopoverView: View {
     private func usageRows(for usage: UsageSnapshot) -> some View {
         let settings = settingsManager.settings
         return VStack(spacing: 8) {
-            UsageRowView(
-                iconName: "clock",
-                label: "5-hour",
-                utilization: usage.fiveHourUtilization,
-                resetIn: usage.fiveHourResetIn,
-                warningThreshold: settings.warningThreshold,
-                criticalThreshold: settings.criticalThreshold,
-                useIcons: settings.useIcons
-            )
-            UsageRowView(
-                iconName: "calendar",
-                label: "7-day",
-                utilization: usage.sevenDayUtilization,
-                resetIn: usage.sevenDayResetIn,
-                warningThreshold: settings.warningThreshold,
-                criticalThreshold: settings.criticalThreshold,
-                useIcons: settings.useIcons
-            )
-            if let sonnet = usage.sonnetUtilization {
+            if settings.showFiveHour {
+                UsageRowView(
+                    iconName: "clock",
+                    label: "5-hour",
+                    utilization: usage.fiveHourUtilization,
+                    resetIn: usage.fiveHourResetIn,
+                    warningThreshold: settings.warningThreshold,
+                    criticalThreshold: settings.criticalThreshold,
+                    useIcons: settings.useIcons,
+                    progressBarHeight: settings.progressBarHeight.points,
+                    accentColor: settings.accentColor.color
+                )
+            }
+            if settings.showSevenDay {
+                UsageRowView(
+                    iconName: "calendar",
+                    label: "7-day",
+                    utilization: usage.sevenDayUtilization,
+                    resetIn: usage.sevenDayResetIn,
+                    warningThreshold: settings.warningThreshold,
+                    criticalThreshold: settings.criticalThreshold,
+                    useIcons: settings.useIcons,
+                    progressBarHeight: settings.progressBarHeight.points,
+                    accentColor: settings.accentColor.color
+                )
+            }
+            if settings.showSonnet, let sonnet = usage.sonnetUtilization {
                 UsageRowView(
                     iconName: "sparkles",
                     label: "Sonnet",
@@ -83,7 +150,9 @@ struct PopoverView: View {
                     resetIn: nil,
                     warningThreshold: settings.warningThreshold,
                     criticalThreshold: settings.criticalThreshold,
-                    useIcons: settings.useIcons
+                    useIcons: settings.useIcons,
+                    progressBarHeight: settings.progressBarHeight.points,
+                    accentColor: settings.accentColor.color
                 )
             }
         }
@@ -156,6 +225,8 @@ private struct UsageRowView: View {
     let warningThreshold: Double
     let criticalThreshold: Double
     let useIcons: Bool
+    let progressBarHeight: CGFloat
+    let accentColor: Color
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
@@ -189,19 +260,19 @@ private struct UsageRowView: View {
             ZStack(alignment: .leading) {
                 Rectangle()
                     .fill(Color.secondary.opacity(0.15))
-                    .frame(height: 4)
-                    .cornerRadius(2)
+                    .frame(height: progressBarHeight)
+                    .cornerRadius(progressBarHeight / 2)
 
                 Rectangle()
                     .fill(utilizationColor)
                     .frame(
                         width: geometry.size.width * CGFloat(utilization) / 100.0,
-                        height: 4
+                        height: progressBarHeight
                     )
-                    .cornerRadius(2)
+                    .cornerRadius(progressBarHeight / 2)
             }
         }
-        .frame(height: 4)
+        .frame(height: progressBarHeight)
     }
 
     private var utilizationColor: Color {
@@ -211,7 +282,7 @@ private struct UsageRowView: View {
         } else if value >= warningThreshold {
             return .orange
         } else {
-            return .green
+            return accentColor
         }
     }
 }

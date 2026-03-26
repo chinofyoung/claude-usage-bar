@@ -40,6 +40,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageHistoryStore.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageSnapshot.swift"
         },
         {
@@ -64,6 +68,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/SparklineView.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/main.swift"
         },
         {
@@ -82,12 +90,14 @@
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/AppDelegate.swift.o",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/AppSettings.swift.o",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/OAuthUsageResponse.swift.o",
+        "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageHistoryStore.swift.o",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageSnapshot.swift.o",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/KeychainTokenReader.swift.o",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/NotificationService.swift.o",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageService.swift.o",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/PopoverView.swift.o",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SettingsView.swift.o",
+        "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SparklineView.swift.o",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/main.swift.o"
       ],
       "otherArguments" : [
@@ -156,6 +166,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageHistoryStore.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageSnapshot.swift.o"
         },
         {
@@ -180,6 +194,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SparklineView.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/main.swift.o"
         },
         {
@@ -192,12 +210,14 @@
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/AppDelegate.swift",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/AppSettings.swift",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/OAuthUsageResponse.swift",
+        "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageHistoryStore.swift",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageSnapshot.swift",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Services/KeychainTokenReader.swift",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Services/NotificationService.swift",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Services/UsageService.swift",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/PopoverView.swift",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/SettingsView.swift",
+        "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/SparklineView.swift",
         "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/main.swift"
       ],
       "tempsPath" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build",
@@ -419,12 +439,14 @@
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/AppDelegate.swift",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/AppSettings.swift",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/OAuthUsageResponse.swift",
+      "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageHistoryStore.swift",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageSnapshot.swift",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Services/KeychainTokenReader.swift",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Services/NotificationService.swift",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Services/UsageService.swift",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/PopoverView.swift",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/SettingsView.swift",
+      "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/SparklineView.swift",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/main.swift",
       "-I",
       "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/Modules",
@@ -671,6 +693,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageHistoryStore.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageSnapshot.swift"
         },
         {
@@ -692,6 +718,10 @@
         {
           "kind" : "file",
           "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/SettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/SparklineView.swift"
         },
         {
           "kind" : "file",
@@ -734,6 +764,14 @@
         {
           "kind" : "file",
           "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SparklineView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageHistoryStore.swift.o"
         },
         {
           "kind" : "file",
@@ -798,6 +836,14 @@
         {
           "kind" : "file",
           "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/SparklineView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBar.build/UsageHistoryStore.swift.o"
         },
         {
           "kind" : "file",
