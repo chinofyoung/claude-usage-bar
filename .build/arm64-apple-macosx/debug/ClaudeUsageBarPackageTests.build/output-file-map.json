@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBarPackageTests.build/primary.swiftdeps"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBarPackageTests.derived/runner.swift": {
+    "dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBarPackageTests.build/runner.d",
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBarPackageTests.build/runner.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBarPackageTests.build/runner~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBarPackageTests.build/runner.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/debug/ClaudeUsageBarPackageTests.build/runner.dia"
+  }
+}

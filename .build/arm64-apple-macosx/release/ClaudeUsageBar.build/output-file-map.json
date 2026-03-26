@@ -1,0 +1,67 @@
+{
+  "": {
+    "dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/ClaudeUsageBar.d",
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/ClaudeUsageBar.o",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/primary.swiftdeps"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/AppDelegate.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/AppDelegate.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/AppDelegate~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/AppDelegate.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/AppDelegate.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/AppSettings.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/AppSettings.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/AppSettings~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/AppSettings.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/AppSettings.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/OAuthUsageResponse.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/OAuthUsageResponse.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/OAuthUsageResponse~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/OAuthUsageResponse.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/OAuthUsageResponse.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Models/UsageSnapshot.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/UsageSnapshot.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/UsageSnapshot~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/UsageSnapshot.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/UsageSnapshot.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Services/KeychainTokenReader.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/KeychainTokenReader.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/KeychainTokenReader~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/KeychainTokenReader.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/KeychainTokenReader.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Services/NotificationService.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/NotificationService.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/NotificationService~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/NotificationService.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/NotificationService.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Services/UsageService.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/UsageService.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/UsageService~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/UsageService.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/UsageService.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/PopoverView.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/PopoverView.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/PopoverView~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/PopoverView.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/PopoverView.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/Views/SettingsView.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/SettingsView.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/SettingsView~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/SettingsView.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/SettingsView.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Sources/ClaudeUsageBar/main.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/main.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/main.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBar.build/main.dia"
+  }
+}

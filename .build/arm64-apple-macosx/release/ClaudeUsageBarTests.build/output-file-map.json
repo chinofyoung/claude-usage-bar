@@ -1,0 +1,19 @@
+{
+  "": {
+    "dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/ClaudeUsageBarTests.d",
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/ClaudeUsageBarTests.o",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/primary.swiftdeps"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Tests/ClaudeUsageBarTests/SettingsManagerTests.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/SettingsManagerTests.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/SettingsManagerTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/SettingsManagerTests.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/SettingsManagerTests.dia"
+  },
+  "/Users/chinoyoung/Code/desktop/claude-usage-bar/Tests/ClaudeUsageBarTests/UsageSnapshotTests.swift": {
+    "object": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/UsageSnapshotTests.swift.o",
+    "swiftmodule": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/UsageSnapshotTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/UsageSnapshotTests.swiftdeps",
+    "diagnostics": "/Users/chinoyoung/Code/desktop/claude-usage-bar/.build/arm64-apple-macosx/release/ClaudeUsageBarTests.build/UsageSnapshotTests.dia"
+  }
+}
