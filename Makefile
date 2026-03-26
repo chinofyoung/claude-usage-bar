@@ -1,4 +1,4 @@
-.PHONY: build run test clean app
+.PHONY: build run test clean app app-universal
 
 APP_NAME = ClaudeUsageBar
 APP_BUNDLE = build/$(APP_NAME).app
@@ -23,6 +23,15 @@ app: build
 	cp Resources/Info.plist $(CONTENTS)/Info.plist
 	cp Resources/AppIcon.icns $(RESOURCES)/AppIcon.icns
 	@echo "Built $(APP_BUNDLE)"
+
+# Build a universal (arm64 + x86_64) .app bundle for distribution
+app-universal:
+	swift build -c release --arch arm64 --arch x86_64
+	mkdir -p $(MACOS) $(RESOURCES)
+	cp .build/apple/Products/Release/$(APP_NAME) $(MACOS)/$(APP_NAME)
+	cp Resources/Info.plist $(CONTENTS)/Info.plist
+	cp Resources/AppIcon.icns $(RESOURCES)/AppIcon.icns
+	@echo "Built universal $(APP_BUNDLE)"
 
 # Run as a proper .app bundle
 run: app
