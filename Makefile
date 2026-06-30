@@ -22,6 +22,7 @@ app: build
 	cp .build/release/$(APP_NAME) $(MACOS)/$(APP_NAME)
 	cp Resources/Info.plist $(CONTENTS)/Info.plist
 	cp Resources/AppIcon.icns $(RESOURCES)/AppIcon.icns
+	codesign --force --sign - --identifier com.chinoyoung.ClaudeUsageBar --options runtime $(APP_BUNDLE)
 	@echo "Built $(APP_BUNDLE)"
 
 # Build a universal (arm64 + x86_64) .app bundle for distribution
@@ -31,6 +32,7 @@ app-universal:
 	cp .build/apple/Products/Release/$(APP_NAME) $(MACOS)/$(APP_NAME)
 	cp Resources/Info.plist $(CONTENTS)/Info.plist
 	cp Resources/AppIcon.icns $(RESOURCES)/AppIcon.icns
+	codesign --force --sign - --identifier com.chinoyoung.ClaudeUsageBar --options runtime $(APP_BUNDLE)
 	@echo "Built universal $(APP_BUNDLE)"
 
 # Run as a proper .app bundle

@@ -1,0 +1,15 @@
+# SwiftPM build artifacts
+.build/
+build/
+
+# Xcode / SwiftPM
+*.xcodeproj
+.swiftpm/
+DerivedData/
+Package.resolved
+
+# Superpowers SDD scratch
+.superpowers/
+
+# macOS
+.DS_Store

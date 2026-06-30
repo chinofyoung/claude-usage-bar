@@ -25,16 +25,29 @@ struct KeychainTokenReader {
     }
 }
 
+// MARK: - Internal Expiry Logic (internal so @testable import can reach it)
+
+extension KeychainTokenReader {
+    static let expiryMarginSeconds: Double = 60
+
+    /// Returns `true` when the token has expired or is within the expiry margin.
+    ///
+    /// - Parameters:
+    ///   - expiresAtMillis: The token's expiry timestamp in epoch **milliseconds**
+    ///                      (as returned by the Claude Code keychain entry).
+    ///   - now: The reference point for "now"; defaults to `Date()`. Injected
+    ///          here so tests can pass a deterministic value.
+    static func isExpiredOrNearExpiry(_ expiresAtMillis: Double, now: Date = Date()) -> Bool {
+        let expiresAtSeconds = expiresAtMillis / 1000.0
+        return expiresAtSeconds - expiryMarginSeconds <= now.timeIntervalSince1970
+    }
+}
+
 // MARK: - Private Helpers
 
 private extension KeychainTokenReader {
     static let cacheService = "com.chinoyoung.ClaudeUsageBar.cached-credentials"
     static let cacheAccount = "oauth"
-    static let expiryMarginSeconds: Double = 60
-
-    static func isExpiredOrNearExpiry(_ expiresAt: Double) -> Bool {
-        expiresAt - expiryMarginSeconds <= Date().timeIntervalSince1970
-    }
 
     static func readCachedToken() throws -> OAuthData {
         let query: [CFString: Any] = [

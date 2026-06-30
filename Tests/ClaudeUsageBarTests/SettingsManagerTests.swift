@@ -17,8 +17,8 @@ final class SettingsManagerTests: XCTestCase {
                        "Default criticalThreshold should be 90")
         XCTAssertTrue(settings.notificationsEnabled,
                       "Default notificationsEnabled should be true")
-        XCTAssertTrue(settings.compactDisplay,
-                      "Default compactDisplay should be true")
+        XCTAssertEqual(settings.statusBarStyle, .normal,
+                       "Default statusBarStyle should be .normal")
     }
 
     // MARK: - testCodableRoundTrip
@@ -28,7 +28,7 @@ final class SettingsManagerTests: XCTestCase {
         original.warningThreshold = 65
         original.criticalThreshold = 85
         original.notificationsEnabled = false
-        original.compactDisplay = false
+        original.statusBarStyle = .compact
 
         let encoded = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(AppSettings.self, from: encoded)
@@ -39,7 +39,7 @@ final class SettingsManagerTests: XCTestCase {
                        "criticalThreshold should survive JSON round-trip")
         XCTAssertFalse(decoded.notificationsEnabled,
                        "notificationsEnabled should survive JSON round-trip")
-        XCTAssertFalse(decoded.compactDisplay,
-                       "compactDisplay should survive JSON round-trip")
+        XCTAssertEqual(decoded.statusBarStyle, .compact,
+                       "statusBarStyle should survive JSON round-trip")
     }
 }
