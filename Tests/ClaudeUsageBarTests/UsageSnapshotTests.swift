@@ -105,4 +105,20 @@ final class UsageSnapshotTests: XCTestCase {
         XCTAssertNil(snapshot.fiveHourResetIn)
         XCTAssertNil(snapshot.sevenDayResetIn)
     }
+
+    // MARK: - testFromResponse_populatesResetDates
+
+    func testFromResponse_populatesResetDates() {
+        let resetString = futureISO8601(secondsFromNow: 7200)   // 2h from now
+        let response = makeResponse(
+            fiveHour: makePeriod(utilization: 30, resetsAt: resetString),
+            sevenDay: makePeriod(utilization: 40, resetsAt: resetString)
+        )
+        let snapshot = UsageSnapshot.from(response: response)
+
+        XCTAssertNotNil(snapshot.fiveHourResetsAt, "Should parse a Date for the 5h reset")
+        XCTAssertNotNil(snapshot.sevenDayResetsAt)
+        let secs = snapshot.fiveHourResetsAt!.timeIntervalSinceNow
+        XCTAssertEqual(secs, 7200, accuracy: 5, "Parsed reset date should be ~2h out")
+    }
 }

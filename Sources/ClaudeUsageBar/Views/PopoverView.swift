@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 // MARK: - AccentColorOption + SwiftUI / AppKit helpers
 
@@ -126,7 +127,8 @@ struct PopoverView: View {
                     criticalThreshold: settings.criticalThreshold,
                     useIcons: settings.useIcons,
                     progressBarHeight: settings.progressBarHeight.points,
-                    accentColor: settings.accentColor.color
+                    accentColor: settings.accentColor.color,
+                    forecast: forecast(for: \.fiveHourUtilization, current: usage.fiveHourUtilization, resetsAt: usage.fiveHourResetsAt)
                 )
             }
             if settings.showSevenDay {
@@ -139,7 +141,8 @@ struct PopoverView: View {
                     criticalThreshold: settings.criticalThreshold,
                     useIcons: settings.useIcons,
                     progressBarHeight: settings.progressBarHeight.points,
-                    accentColor: settings.accentColor.color
+                    accentColor: settings.accentColor.color,
+                    forecast: forecast(for: \.sevenDayUtilization, current: usage.sevenDayUtilization, resetsAt: usage.sevenDayResetsAt)
                 )
             }
             if settings.showSonnet, let sonnet = usage.sonnetUtilization {
@@ -152,9 +155,34 @@ struct PopoverView: View {
                     criticalThreshold: settings.criticalThreshold,
                     useIcons: settings.useIcons,
                     progressBarHeight: settings.progressBarHeight.points,
-                    accentColor: settings.accentColor.color
+                    accentColor: settings.accentColor.color,
+                    forecast: nil
                 )
             }
+        }
+    }
+
+    private func forecast(for value: KeyPath<UsageHistoryRecord, Int>,
+                          current: Int, resetsAt: Date?) -> UsageForecast {
+        UsageForecaster.forecast(
+            records: historyStore.records,
+            value: value,
+            current: current,
+            resetsAt: resetsAt,
+            now: Date()
+        )
+    }
+
+    private func exportHistory() {
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "claude-usage-history.csv"
+        panel.allowedContentTypes = [.commaSeparatedText]
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        let csv = HistoryCSVExporter.csv(from: historyStore.records)
+        do {
+            try csv.write(to: url, atomically: true, encoding: .utf8)
+        } catch {
+            NSAlert(error: error).runModal()
         }
     }
 
@@ -169,6 +197,10 @@ struct PopoverView: View {
             .font(.caption)
 
             Spacer()
+
+            Button("Export") { exportHistory() }
+                .buttonStyle(.plain)
+                .font(.caption)
 
             Button {
                 Task { await usageService.fetchUsage() }
@@ -227,6 +259,7 @@ private struct UsageRowView: View {
     let useIcons: Bool
     let progressBarHeight: CGFloat
     let accentColor: Color
+    let forecast: UsageForecast?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
@@ -251,8 +284,33 @@ private struct UsageRowView: View {
                         .foregroundColor(.secondary)
                 }
             }
+            if let forecast, let text = forecastLine(forecast) {
+                Text(text)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
             progressBar
         }
+    }
+
+    private func forecastLine(_ f: UsageForecast) -> String? {
+        switch f.trend {
+        case .steady:    return "steady"
+        case .declining: return "declining"
+        case .rising:
+            if let t = f.timeToLimit { return "≈ \(Self.shortDuration(t)) to limit" }
+            if let p = f.projectedAtReset { return "resets first — on pace to ~\(Int(p))%" }
+            return "rising"
+        }
+    }
+
+    private static func shortDuration(_ seconds: TimeInterval) -> String {
+        let total = Int(seconds)
+        let h = total / 3600
+        let m = (total % 3600) / 60
+        if h > 0 && m > 0 { return "\(h)h \(m)m" }
+        if h > 0 { return "\(h)h" }
+        return "\(max(1, m))m"
     }
 
     private var progressBar: some View {

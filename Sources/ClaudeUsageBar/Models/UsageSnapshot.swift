@@ -11,6 +11,10 @@ struct UsageSnapshot {
     let fiveHourResetIn: String?
     /// Human-readable time until the 7-day window resets, e.g. "3d 4h"
     let sevenDayResetIn: String?
+    /// Absolute time the 5-hour window resets, when known.
+    let fiveHourResetsAt: Date?
+    /// Absolute time the 7-day window resets, when known.
+    let sevenDayResetsAt: Date?
     /// When this snapshot was captured
     let lastUpdated: Date
 
@@ -25,6 +29,8 @@ struct UsageSnapshot {
             sonnetUtilization: response.sevenDaySonnet.map { clamp($0.utilization) },
             fiveHourResetIn: response.fiveHour.flatMap { formatCountdown(from: $0.resetsAt, relativeTo: now) },
             sevenDayResetIn: response.sevenDay.flatMap { formatCountdown(from: $0.resetsAt, relativeTo: now) },
+            fiveHourResetsAt: response.fiveHour.flatMap { parseFutureDate(from: $0.resetsAt, relativeTo: now) },
+            sevenDayResetsAt: response.sevenDay.flatMap { parseFutureDate(from: $0.resetsAt, relativeTo: now) },
             lastUpdated: now
         )
     }
@@ -36,6 +42,8 @@ struct UsageSnapshot {
             sonnetUtilization: nil,
             fiveHourResetIn: nil,
             sevenDayResetIn: nil,
+            fiveHourResetsAt: nil,
+            sevenDayResetsAt: nil,
             lastUpdated: Date()
         )
     }
@@ -47,6 +55,20 @@ struct UsageSnapshot {
 private func clamp(_ value: Double?) -> Int {
     guard let value else { return 0 }
     return Int(min(100, max(0, value)).rounded())
+}
+
+/// Parses an ISO8601 timestamp into a future `Date`, tolerating fractional seconds.
+/// Returns nil if unparseable or already in the past.
+private func parseFutureDate(from iso8601: String, relativeTo now: Date) -> Date? {
+    let formatter = ISO8601DateFormatter()
+    formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+    var date = formatter.date(from: iso8601)
+    if date == nil {
+        formatter.formatOptions = [.withInternetDateTime]
+        date = formatter.date(from: iso8601)
+    }
+    guard let date, date > now else { return nil }
+    return date
 }
 
 /// Parses an ISO8601 timestamp and returns a human-readable countdown string
