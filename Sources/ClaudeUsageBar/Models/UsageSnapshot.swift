@@ -1,12 +1,24 @@
 import Foundation
 
+/// A weekly limit scoped to a specific model.
+struct ScopedLimit: Equatable {
+    /// Display name of the model, e.g. "Fable"
+    let label: String
+    /// Utilization, 0-100
+    let utilization: Int
+    /// Human-readable time until reset
+    let resetIn: String?
+    /// Absolute reset time, when known
+    let resetsAt: Date?
+}
+
 struct UsageSnapshot {
     /// 5-hour rolling utilization, 0-100
     let fiveHourUtilization: Int
     /// 7-day rolling utilization, 0-100
     let sevenDayUtilization: Int
-    /// Sonnet-specific 7-day utilization, 0-100 (absent when not returned by API)
-    let sonnetUtilization: Int?
+    /// Per-model weekly limits (e.g. "Fable"); empty when none are reported
+    let scopedLimits: [ScopedLimit]
     /// Human-readable time until the 5-hour window resets, e.g. "2h 15m"
     let fiveHourResetIn: String?
     /// Human-readable time until the 7-day window resets, e.g. "3d 4h"
@@ -26,7 +38,7 @@ struct UsageSnapshot {
         return UsageSnapshot(
             fiveHourUtilization: clamp(response.fiveHour?.utilization),
             sevenDayUtilization: clamp(response.sevenDay?.utilization),
-            sonnetUtilization: response.sevenDaySonnet.map { clamp($0.utilization) },
+            scopedLimits: scopedLimits(from: response, relativeTo: now),
             fiveHourResetIn: response.fiveHour.flatMap { formatCountdown(from: $0.resetsAt, relativeTo: now) },
             sevenDayResetIn: response.sevenDay.flatMap { formatCountdown(from: $0.resetsAt, relativeTo: now) },
             fiveHourResetsAt: response.fiveHour.flatMap { parseFutureDate(from: $0.resetsAt, relativeTo: now) },
@@ -35,11 +47,37 @@ struct UsageSnapshot {
         )
     }
 
+    private static func scopedLimits(from response: OAuthUsageResponse, relativeTo now: Date) -> [ScopedLimit] {
+        let scoped = (response.limits ?? [])
+            .filter { $0.kind == "weekly_scoped" }
+            .map { limit -> ScopedLimit in
+                let name = [limit.scope?.model?.displayName, limit.scope?.surface?.displayName]
+                    .compactMap { $0 }
+                    .first { !$0.isEmpty } ?? "Scoped"
+                return ScopedLimit(
+                    label: name,
+                    utilization: clamp(limit.percent),
+                    resetIn: limit.resetsAt.flatMap { formatCountdown(from: $0, relativeTo: now) },
+                    resetsAt: limit.resetsAt.flatMap { parseFutureDate(from: $0, relativeTo: now) }
+                )
+            }
+        if !scoped.isEmpty { return scoped }
+
+        // Legacy fallback for responses that only carry seven_day_sonnet.
+        guard let sonnet = response.sevenDaySonnet else { return [] }
+        return [ScopedLimit(
+            label: "Sonnet",
+            utilization: clamp(sonnet.utilization),
+            resetIn: formatCountdown(from: sonnet.resetsAt, relativeTo: now),
+            resetsAt: parseFutureDate(from: sonnet.resetsAt, relativeTo: now)
+        )]
+    }
+
     static var placeholder: UsageSnapshot {
         UsageSnapshot(
             fiveHourUtilization: 0,
             sevenDayUtilization: 0,
-            sonnetUtilization: nil,
+            scopedLimits: [],
             fiveHourResetIn: nil,
             sevenDayResetIn: nil,
             fiveHourResetsAt: nil,

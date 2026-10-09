@@ -57,7 +57,7 @@ struct SettingsView: View {
                         settingsManager.save()
                     }
 
-                Toggle("Show Sonnet metric", isOn: $settingsManager.settings.showSonnet)
+                Toggle("Model-specific weekly limits", isOn: $settingsManager.settings.showSonnet)
                     .onChange(of: settingsManager.settings.showSonnet) { _ in
                         settingsManager.save()
                     }

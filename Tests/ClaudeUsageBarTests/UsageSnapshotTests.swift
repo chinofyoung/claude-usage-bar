@@ -45,8 +45,9 @@ final class UsageSnapshotTests: XCTestCase {
                        "Expected fiveHourUtilization to be 46 (rounded from 45.6)")
         XCTAssertEqual(snapshot.sevenDayUtilization, 72,
                        "Expected sevenDayUtilization to be 72 (rounded from 72.3)")
-        XCTAssertEqual(snapshot.sonnetUtilization, 89,
-                       "Expected sonnetUtilization to be 89 (rounded from 88.9)")
+        XCTAssertEqual(snapshot.scopedLimits.first?.utilization, 89,
+                       "Legacy sonnet should fall back to a scoped limit at 89 (rounded from 88.9)")
+        XCTAssertEqual(snapshot.scopedLimits.first?.label, "Sonnet")
 
         // Reset strings should be non-nil because the dates are in the future
         XCTAssertNotNil(snapshot.fiveHourResetIn,  "fiveHourResetIn should be non-nil for a future reset date")
@@ -70,8 +71,8 @@ final class UsageSnapshotTests: XCTestCase {
         XCTAssertEqual(snapshot.fiveHourUtilization, 0,
                        "fiveHourUtilization should be 0 when fiveHour period is absent")
         XCTAssertEqual(snapshot.sevenDayUtilization, 60)
-        XCTAssertNil(snapshot.sonnetUtilization,
-                     "sonnetUtilization should be nil when sevenDaySonnet period is absent")
+        XCTAssertTrue(snapshot.scopedLimits.isEmpty,
+                      "scopedLimits should be empty when no limits or sevenDaySonnet exist")
         XCTAssertNil(snapshot.fiveHourResetIn,
                      "fiveHourResetIn should be nil when fiveHour period is absent")
     }
@@ -91,7 +92,7 @@ final class UsageSnapshotTests: XCTestCase {
                        "Utilization > 100 should be clamped to 100")
         XCTAssertEqual(snapshot.sevenDayUtilization, 0,
                        "Utilization < 0 should be clamped to 0")
-        XCTAssertEqual(snapshot.sonnetUtilization, 100)
+        XCTAssertEqual(snapshot.scopedLimits.first?.utilization, 100)
     }
 
     // MARK: - testPlaceholder
@@ -101,7 +102,7 @@ final class UsageSnapshotTests: XCTestCase {
 
         XCTAssertEqual(snapshot.fiveHourUtilization, 0)
         XCTAssertEqual(snapshot.sevenDayUtilization, 0)
-        XCTAssertNil(snapshot.sonnetUtilization)
+        XCTAssertTrue(snapshot.scopedLimits.isEmpty)
         XCTAssertNil(snapshot.fiveHourResetIn)
         XCTAssertNil(snapshot.sevenDayResetIn)
     }
@@ -120,5 +121,66 @@ final class UsageSnapshotTests: XCTestCase {
         XCTAssertNotNil(snapshot.sevenDayResetsAt)
         let secs = snapshot.fiveHourResetsAt!.timeIntervalSinceNow
         XCTAssertEqual(secs, 7200, accuracy: 5, "Parsed reset date should be ~2h out")
+    }
+
+    // MARK: - Scoped limits
+
+    private func decode(_ json: String) throws -> OAuthUsageResponse {
+        try JSONDecoder().decode(OAuthUsageResponse.self, from: Data(json.utf8))
+    }
+
+    func testDecodesSampleLimitsIntoFableScopedLimit() throws {
+        let json = """
+        {"five_hour":null,"seven_day":null,"seven_day_sonnet":null,
+         "limits":[
+          {"kind":"session","group":"session","percent":26,"severity":"normal","resets_at":"2099-10-09T09:50:00.463454+00:00","scope":null,"is_active":false},
+          {"kind":"weekly_all","group":"weekly","percent":47,"severity":"normal","resets_at":"2099-10-13T05:00:00.463476+00:00","scope":null,"is_active":false},
+          {"kind":"weekly_scoped","group":"weekly","percent":80,"severity":"warning","resets_at":"2099-10-13T05:00:00.463633+00:00","scope":{"model":{"id":null,"display_name":"Fable"},"surface":null},"is_active":true}
+         ]}
+        """
+        let snapshot = UsageSnapshot.from(response: try decode(json))
+        XCTAssertEqual(snapshot.scopedLimits.count, 1)
+        XCTAssertEqual(snapshot.scopedLimits[0].label, "Fable")
+        XCTAssertEqual(snapshot.scopedLimits[0].utilization, 80)
+        XCTAssertNotNil(snapshot.scopedLimits[0].resetIn)
+        XCTAssertNotNil(snapshot.scopedLimits[0].resetsAt)
+    }
+
+    func testNullOrAbsentLimitsYieldsEmpty() throws {
+        XCTAssertTrue(UsageSnapshot.from(response: try decode("{}")).scopedLimits.isEmpty)
+        XCTAssertTrue(UsageSnapshot.from(response: try decode(#"{"limits":null}"#)).scopedLimits.isEmpty)
+    }
+
+    func testMalformedLimitEntriesDoNotBreakDecoding() throws {
+        let json = """
+        {"five_hour":{"utilization":10,"resets_at":"2099-01-01T00:00:00Z"},
+         "limits":["junk", 5, null, {},
+          {"kind":"mystery","percent":"x"},
+          {"kind":"weekly_scoped","percent":150,"scope":{"model":null,"surface":null}},
+          {"kind":"weekly_scoped","percent":30,"scope":{"model":{"display_name":null},"surface":{"display_name":"CLI"}}}]}
+        """
+        let response = try decode(json)
+        XCTAssertEqual(response.fiveHour?.utilization, 10)
+        let snapshot = UsageSnapshot.from(response: response)
+        XCTAssertEqual(snapshot.scopedLimits.map(\.label), ["Scoped", "CLI"])
+        XCTAssertEqual(snapshot.scopedLimits.map(\.utilization), [100, 30])
+    }
+
+    func testNonArrayLimitsDoesNotBreakDecoding() throws {
+        let response = try decode(#"{"limits":"nope","seven_day":{"utilization":5,"resets_at":"2099-01-01T00:00:00Z"}}"#)
+        XCTAssertEqual(response.sevenDay?.utilization, 5)
+        XCTAssertTrue(UsageSnapshot.from(response: response).scopedLimits.isEmpty)
+    }
+
+    func testLegacySonnetFallbackOnlyWhenNoScopedLimits() {
+        let legacy = makeResponse(sevenDaySonnet: makePeriod(utilization: 42))
+        XCTAssertEqual(UsageSnapshot.from(response: legacy).scopedLimits.map(\.label), ["Sonnet"])
+
+        let scoped = OAuthUsageResponse(
+            sevenDaySonnet: makePeriod(utilization: 42),
+            limits: [UsageLimit(kind: "weekly_scoped", percent: 80,
+                                scope: .init(model: .init(displayName: "Fable")))]
+        )
+        XCTAssertEqual(UsageSnapshot.from(response: scoped).scopedLimits.map(\.label), ["Fable"])
     }
 }

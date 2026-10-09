@@ -84,7 +84,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let sevenDayValue = usage.sevenDayUtilization
         let fiveHourValue = usage.fiveHourUtilization
-        let sonnetValue = usage.sonnetUtilization
+        let sonnetValue = usage.scopedLimits.first?.utilization
+        let scopedPrefix = usage.scopedLimits.first?.label.first.map { String($0).uppercased() } ?? "S"
 
         // Collect all visible values to determine the critical warning indicator
         var visibleValues: [Int] = []
@@ -176,7 +177,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     ))
                 } else {
                     segment.append(NSAttributedString(
-                        string: "S:\(sonnetValue)%",
+                        string: "\(scopedPrefix):\(sonnetValue)%",
                         attributes: baseAttributes.merging([.foregroundColor: color(for: sonnetValue)]) { $1 }
                     ))
                 }
@@ -199,7 +200,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             if settings.showSonnet, let sonnetValue {
                 appendSegment(NSAttributedString(
-                    string: "S:\(sonnetValue)%",
+                    string: "\(scopedPrefix):\(sonnetValue)%",
                     attributes: baseAttributes.merging([.foregroundColor: color(for: sonnetValue)]) { $1 }
                 ))
             }

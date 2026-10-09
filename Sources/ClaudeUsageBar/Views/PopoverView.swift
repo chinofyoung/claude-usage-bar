@@ -120,7 +120,7 @@ struct PopoverView: View {
             if settings.showFiveHour {
                 UsageRowView(
                     iconName: "clock",
-                    label: "5-hour",
+                    label: "Session",
                     utilization: usage.fiveHourUtilization,
                     resetIn: usage.fiveHourResetIn,
                     warningThreshold: settings.warningThreshold,
@@ -134,7 +134,7 @@ struct PopoverView: View {
             if settings.showSevenDay {
                 UsageRowView(
                     iconName: "calendar",
-                    label: "7-day",
+                    label: "Weekly · all models",
                     utilization: usage.sevenDayUtilization,
                     resetIn: usage.sevenDayResetIn,
                     warningThreshold: settings.warningThreshold,
@@ -145,12 +145,12 @@ struct PopoverView: View {
                     forecast: forecast(for: \.sevenDayUtilization, current: usage.sevenDayUtilization, resetsAt: usage.sevenDayResetsAt)
                 )
             }
-            if settings.showSonnet, let sonnet = usage.sonnetUtilization {
+            ForEach(settings.showSonnet ? usage.scopedLimits : [], id: \.label) { limit in
                 UsageRowView(
                     iconName: "sparkles",
-                    label: "Sonnet",
-                    utilization: sonnet,
-                    resetIn: nil,
+                    label: "Weekly · \(limit.label)",
+                    utilization: limit.utilization,
+                    resetIn: limit.resetIn,
                     warningThreshold: settings.warningThreshold,
                     criticalThreshold: settings.criticalThreshold,
                     useIcons: settings.useIcons,

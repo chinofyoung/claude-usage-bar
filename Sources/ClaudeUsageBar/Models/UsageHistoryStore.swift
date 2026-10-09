@@ -45,7 +45,7 @@ final class UsageHistoryStore: ObservableObject {
             timestamp: snapshot.lastUpdated,
             fiveHourUtilization: snapshot.fiveHourUtilization,
             sevenDayUtilization: snapshot.sevenDayUtilization,
-            sonnetUtilization: snapshot.sonnetUtilization
+            sonnetUtilization: snapshot.scopedLimits.first?.utilization
         )
         append(record: record, now: Date())
     }

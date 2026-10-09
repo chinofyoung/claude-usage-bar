@@ -90,7 +90,7 @@ final class UsageHistoryStoreTests: XCTestCase {
         let store = UsageHistoryStore(fileURL: tempFileURL(), userDefaults: ephemeralDefaults())
         let timestamp = Date()
         let snapshot = UsageSnapshot(
-            fiveHourUtilization: 33, sevenDayUtilization: 44, sonnetUtilization: 55,
+            fiveHourUtilization: 33, sevenDayUtilization: 44, scopedLimits: [ScopedLimit(label: "Fable", utilization: 55, resetIn: nil, resetsAt: nil)],
             fiveHourResetIn: nil, sevenDayResetIn: nil,
             fiveHourResetsAt: nil, sevenDayResetsAt: nil,
             lastUpdated: timestamp
